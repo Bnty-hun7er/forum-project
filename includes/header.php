@@ -1,3 +1,11 @@
+<?php 
+  define("APPURL" , "http://localhost/forumpro") ;
+
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,9 +15,9 @@
     <title>Welcome To Forum</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="<?php echo APPURL ?>/css/bootstrap.css" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="css/custom.css" rel="stylesheet">
+    <link href="<?php echo APPURL ?>/css/custom.css" rel="stylesheet">
   </head>
 
   <body>
@@ -23,13 +31,15 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="index.html">Forum</a>
+          <a class="navbar-brand" href="<?php echo APPURL ; ?>/index.html">Forum</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="index.html">Home</a></li>
-            <li><a href="register.html">Register</a></li>
-            <li><a href="create.html">Create Topic</a></li>
+            <li class="active"><a href="<?php echo APPURL?>/index.php">Home</a></li>
+            <li><a href="<?php echo APPURL ?>/auth/register.php">Register</a></li>
+            <li><a href="<?php echo APPURL ?>/login.php">Login</a></li>  
+            <li><a href="<?php echo APPURL  ?>/create.php">Create </a></li>
+            <li><a href="<?php echo APPURL  ?>/topic.php">Topic </a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>

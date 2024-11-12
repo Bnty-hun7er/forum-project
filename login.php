@@ -1,51 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Register With Us</title>
+<?php  require "includes/header.php" ; ?>
+<?php  require "config/config.php" ; ?>
 
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <!-- Custom styles for this template -->
-    <link href="css/custom.css" rel="stylesheet">
-  </head>
+<?php
 
-  <body>
 
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="index.html">Forum</a>
-        </div>
-        <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="index.html">Home</a></li>
-            <li><a href="register.html">Register</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="create.html">Create Topic</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </div>
+if(isset($_POST['login'])){
+
+	$email = $_POST['email'];
+	$password = $_POST['password'];
+
+	$login = $conn->prepare("SELECT * FROM users WHERE email = :email");
+	$login->execute(array(
+		':email' => $email
+	));
+
+	$row = $login->fetch(PDO::FETCH_ASSOC);
+
+	if(password_verify($password, $row['password'])){
+
+		$_SESSION['email'] = $email;
+		$_SESSION['username'] = $row['username'];
+		$_SESSION['id'] = $row['id'];
+		$_SESSION['avatar'] = $row['avatar'];
+
+		header("Location: ".APPURL."/index.php");
+	}else{
+		echo "<script>alert('Invalid Email or Password')</script>";
+	}
+}
+
+
+?>
+
+
+
+
+
+
+
+
+
 
     <div class="container">
 		<div class="row">
 			<div class="col-md-8">
 				<div class="main-col">
 					<div class="block">
-						<h1 class="pull-left">Register</h1>
+						<h1 class="pull-left">Get in</h1>
 						<h4 class="pull-right">A Simple Forum</h4>
 						<div class="clearfix"></div>
 						<hr>
-						<form role="form" enctype="multipart/form-data" method="post" action="register.php">
+						<form role="form" enctype="multipart/form-data" method="post" action="login.php">
 							
 							<div class="form-group">
 							<label>Email Address*</label> <input type="email" class="form-control"
@@ -57,7 +62,7 @@
                     name="password" placeholder="Enter A Password">
                     </div>
 	
-			        <input name="register" type="submit" class="color btn btn-default" value="Register" />
+			        <input name="login" type="submit" class="color btn btn-default" value="login" />
         </form>
 					</div>
 				</div>
