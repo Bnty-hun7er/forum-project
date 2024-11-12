@@ -1,8 +1,12 @@
-
 <?php require "../includes/header.php"; ?>
 <?php require "../config/config.php"; ?>
 
 <?php
+
+
+if (isset($_SESSION['username'])) {
+	header("Location: " . APPURL . "/index.php");
+}
 
 
 if (isset($_POST['register'])) {
@@ -40,7 +44,7 @@ if (isset($_POST['register'])) {
 		));
 
 
-		header("Location: ".APPURL."/login.php");
+		header("Location: " . APPURL . "/auth/login.php");
 	}
 }
 
