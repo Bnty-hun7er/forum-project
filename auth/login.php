@@ -30,6 +30,7 @@ if (isset($_POST['login'])) {
 		$_SESSION['username'] = $row['username'];
 		$_SESSION['id'] = $row['id'];
 		$_SESSION['avatar'] = $row['avatar'];
+		
 
 		header("Location: " . APPURL . "/index.php");
 	} else {

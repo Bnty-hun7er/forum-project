@@ -11,11 +11,29 @@ if (!isset($_SESSION['username'])) {
 }
 
 
-if(empty($_POST['title']) || empty($_POST['category']) || empty($_POST['body'])) {
-	echo "<script>alert('All fields are required')</script>";
- }
+
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $select = $conn->prepare("SELECT * FROM topics WHERE id = '$id'");
+            $select->execute();
+                    
+            $topic = $select->fetch(PDO::FETCH_OBJ);
+        }
+
+
+
+
+
+
+
+
 // Check if the form was submitted
 if (isset($_POST['submit'])) {
+
+
+    if(empty($_POST['title']) || empty($_POST['category']) || empty($_POST['body'])) {
+       echo "<script>alert('All fields are required')</script>";
+    }
 	// Get form data
 	$title = $_POST['title'];
 	$category = $_POST['category'];
@@ -24,8 +42,8 @@ if (isset($_POST['submit'])) {
 	$user_image = $_SESSION['avatar'];
 
 	// Prepare the query to insert the topic into the database
-	$create = $conn->prepare("INSERT INTO topics (title, category, body, author,user_image) VALUES (:title, :category, :body, :author ,:user_image)");
-	$create->execute(array(
+	$update = $conn->prepare("UPDATE topics SET title = :title, category = :category, body = :body, author = :author, user_image = :user_image WHERE id = '$id'");
+	$update->execute(array(
 		':title' => $title,
 		':category' => $category,
 		':body' => $body,
@@ -34,14 +52,14 @@ if (isset($_POST['submit'])) {
 	));
 
 	// Check if the insertion was successful and set the session message
-	if ($create) {
-		$_SESSION['message'] = 'Topic Created Successfully';
+	if ($update) {
+		$_SESSION['message'] = 'Topic updated Successfully';
 	} else {
-		$_SESSION['message'] = 'Failed to Create Topic';
+		$_SESSION['message'] = 'Failed to update Topic';
 	}
 
 	// Redirect back to the create page
-	header("Location: " . APPURL . "/topic/create.php");
+	header("Location: " . APPURL . "");
 	exit(); // Ensure no further code is executed after the redirect
 }
 ?>
@@ -62,10 +80,10 @@ if (isset($_POST['submit'])) {
 						unset($_SESSION['message']); // Clear the message after it's displayed
 					}
 					?>
-					<form role="form" method="POST" action="create.php">
+					<form role="form" method="POST" action="update.php?id=<?php echo $id ?>">
 						<div class="form-group">
 							<label>Topic Title</label>
-							<input type="text" class="form-control" name="title" placeholder="Enter Post Title" required>
+							<input type="text" value="<?php  echo $topic->title?>" class="form-control" name="title" placeholder="Enter Post Title" required>
 						</div>
 						<div class="form-group">
 							<label>Category</label>
@@ -79,12 +97,12 @@ if (isset($_POST['submit'])) {
 						</div>
 						<div class="form-group">
 							<label>Topic Body</label>
-							<textarea id="body" rows="10" cols="80" class="form-control" name="body" required></textarea>
+							<textarea id="body" rows="10" cols="80" class="form-control" name="body" required><?php  echo $topic->body?></textarea>
 							<script>
 								CKEDITOR.replace('body');
 							</script>
 						</div>
-						<button type="submit" name="submit" class="btn btn-default">Submit</button>
+						<button type="submit" name="submit" class="btn btn-default">UPDATE</button>
 					</form>
 				</div>
 			</div>
