@@ -3,50 +3,58 @@
 
 <?php
 
-
-if (isset($_SESSION['username'])) {
-	header("Location: " . APPURL . "/index.php");
-}
-
-
 if (isset($_POST['register'])) {
+    if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['username']) || empty($_POST['password']) || empty($_POST['password2'])) {
+        echo "<script>alert('All fields are required')</script>";
+    } else {
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $username = $_POST['username'];
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $password2 = $_POST['password2'];
 
-	if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['username']) || empty($_POST['password']) || empty($_POST['password2'])) {
+        if ($_POST['password'] !== $_POST['password2']) {
+            echo "<script>alert('Passwords do not match')</script>";
+            exit();
+        }
+        $about = $_POST['about'];
 
-		echo "<script>alert('All fields are required')</script>";
-	} else {
-		$name = $_POST['name'];
-		$email = $_POST['email'];
-		$username = $_POST['username'];
-		$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-		$password2 = $_POST['password2'];
+        $avatar = $_FILES['avatar']['name'];
+        $avatar_tmp = $_FILES['avatar']['tmp_name'];
+        $file_size = $_FILES['avatar']['size'];
+        $file_type = pathinfo($avatar, PATHINFO_EXTENSION);
+        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
 
-		if ($_POST['password'] !== $_POST['password2']) {
-			echo "<script>alert('Passwords do not match')</script>";
-			exit();
-		}
-		$about = $_POST['about'];
+        // Generate a unique file name
+        $unique_avatar = uniqid('avatar_', true) . '.' . $file_type;
+        $dir = "../img/" . $unique_avatar;
 
-		$avatar = $_FILES['avatar']['name'];
+        // Validate file type and size
+        if (!in_array(strtolower($file_type), $allowed_types)) {
+            echo "<script>alert('Invalid file type. Only JPG, JPEG, PNG, and GIF are allowed.')</script>";
+        } elseif ($file_size > 2 * 1024 * 1024) { // 2 MB size limit
+            echo "<script>alert('File size exceeds the 2 MB limit.')</script>";
+        } else {
+            // Move the uploaded file to the desired directory
+            if (move_uploaded_file($avatar_tmp, $dir)) {
+                $insert = $conn->prepare("INSERT INTO users (name, email, username, password, about, avatar) VALUES (:name, :email, :username, :password, :about, :avatar)");
+                $insert->execute(array(
+                    ':name' => $name,
+                    ':email' => $email,
+                    ':username' => $username,
+                    ':password' => $password,
+                    ':about' => $about,
+                    ':avatar' => $unique_avatar
+                ));
 
-		$dir = "img/" . basename($avatar);
-
-
-		$insert  = $conn->prepare("INSERT INTO users (name, email, username, password, about, avatar) VALUES (:name , :email , :username , :password , :about , :avatar)");;
-
-		$insert->execute(array(
-			':name' => $name,
-			':email' => $email,
-			':username' => $username,
-			':password' => $password,
-			':about' => $about,
-			':avatar' => $avatar
-		));
-
-
-		header("Location: " . APPURL . "/auth/login.php");
-	}
+                header("Location: " . APPURL . "/auth/login.php");
+            } else {
+                echo "<script>alert('Failed to upload avatar. Please try again.')</script>";
+            }
+        }
+    }
 }
+
 
 
 ?>

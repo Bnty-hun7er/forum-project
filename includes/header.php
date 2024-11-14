@@ -10,7 +10,7 @@ define("APPURL", "http://localhost/forumpro");
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Welcome To Forum</title>
+  <title>Hakers Talk</title>
 
   <!-- Bootstrap core CSS -->
   <link href="<?php echo APPURL ?>/css/bootstrap.css" rel="stylesheet">
@@ -29,7 +29,7 @@ define("APPURL", "http://localhost/forumpro");
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="<?php echo APPURL; ?>/index.php">Forum</a>
+        <a class="navbar-brand" href="<?php echo APPURL; ?>/index.php">Club-4-Hack</a>
       </div>
       <div class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
@@ -68,6 +68,7 @@ define("APPURL", "http://localhost/forumpro");
                 <li><a href="<?php echo APPURL; ?>/auth/logout.php">Logout</a></li>
               <?php else: ?>
                 <li><a href="<?php echo APPURL; ?>/auth/login.php">Login</a></li>
+                <li><a href="#">About the dev</a></li>
               <?php endif; ?>
             </ul>
           </li>

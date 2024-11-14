@@ -1,50 +1,47 @@
 <?php
 require "../includes/header.php";
 require "../config/config.php";
-?>
 
-
-<?php
 if (!isset($_SESSION['username'])) {
-	header("Location: " . APPURL . "/login.php");
-	exit();
+    header("Location: " . APPURL . "/login.php");
+    exit();
 }
 
-
-if(empty($_POST['title']) || empty($_POST['category']) || empty($_POST['body'])) {
-	echo "<script>alert('All fields are required')</script>";
- }
 // Check if the form was submitted
 if (isset($_POST['submit'])) {
-	// Get form data
-	$title = $_POST['title'];
-	$category = $_POST['category'];
-	$body = $_POST['body'];
-	$author = $_SESSION['username'];
-	$user_image = $_SESSION['avatar'];
+    if (empty($_POST['title']) || empty($_POST['category']) || empty($_POST['body'])) {
+        echo "<script>alert('All fields are required')</script>";
+    } else {
+        // Get form data
+        $title = htmlspecialchars($_POST['title']);
+        $category = htmlspecialchars($_POST['category']);
+        $body = htmlspecialchars($_POST['body']);
+        $author = $_SESSION['username'];
+        $user_image = $_SESSION['avatar'];
 
-	// Prepare the query to insert the topic into the database
-	$create = $conn->prepare("INSERT INTO topics (title, category, body, author,user_image) VALUES (:title, :category, :body, :author ,:user_image)");
-	$create->execute(array(
-		':title' => $title,
-		':category' => $category,
-		':body' => $body,
-		':author' => $author,
-		':user_image' => $user_image
-	));
+        try {
+            // Prepare the query to insert the topic into the database
+            $create = $conn->prepare("INSERT INTO topics (title, category, body, author, user_image) VALUES (:title, :category, :body, :author, :user_image)");
+            $create->execute(array(
+                ':title' => $title,
+                ':category' => $category,
+                ':body' => $body,
+                ':author' => $author,
+                ':user_image' => $user_image
+            ));
 
-	// Check if the insertion was successful and set the session message
-	if ($create) {
-		$_SESSION['message'] = 'Topic Created Successfully';
-	} else {
-		$_SESSION['message'] = 'Failed to Create Topic';
-	}
+            $_SESSION['message'] = 'Topic Created Successfully';
+        } catch (PDOException $e) {
+            $_SESSION['message'] = 'Failed to Create Topic: ' . $e->getMessage();
+        }
 
-	// Redirect back to the create page
-	header("Location: " . APPURL . "/topic/create.php");
-	exit(); // Ensure no further code is executed after the redirect
+        // Redirect back to the create page
+        header("Location: " . APPURL . "/topic/create.php");
+        exit();
+    }
 }
 ?>
+
 
 <div class="container">
 	<div class="row">

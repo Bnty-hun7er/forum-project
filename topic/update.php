@@ -18,6 +18,14 @@ if (!isset($_SESSION['username'])) {
             $select->execute();
                     
             $topic = $select->fetch(PDO::FETCH_OBJ);
+
+
+			if ($topic->author != $_SESSION['username']) {
+				echo "<script>alert('You are not authorized to edit this topic')</script>";
+				header("Location: " . APPURL . "");
+				exit();
+			}
+
         }
 
 

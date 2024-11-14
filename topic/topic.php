@@ -34,6 +34,63 @@ if (!isset($_SESSION['username'])) {
 
 
 
+	//reply submission 
+if (isset($_POST['submit'])) {
+    if (empty($_POST['reply']) ) {
+        echo "<script>alert('reply cant  be empty')</script>";
+    } else {
+        // Get form data
+        $reply = htmlspecialchars($_POST['reply']);
+        $user_id = ($_SESSION['id']);
+		$topic_id = $id;
+        $repliedBy = $_SESSION['username'];
+        $user_image = $_SESSION['avatar'];
+
+        try {
+            // Prepare the query to insert the topic into the database
+            $createReply = $conn->prepare("INSERT INTO replies (reply, user_id, user_image, topic_id,user_name) VALUES ( :reply, :user_id, :user_image , :topic_id , :user_name)");
+            $createReply->execute(array(
+                ':reply' => $reply,
+                ':user_id' => $user_id,
+                ':user_image' => $user_image,
+                ':topic_id' => $topic_id,
+                ':user_name' => $repliedBy
+            ));
+
+
+
+
+
+
+            $_SESSION['message'] = 'Replied Successfully';
+        } catch (PDOException $e) {
+            $_SESSION['message'] = 'Failed to reply : ' . $e->getMessage();
+        }
+
+        // Redirect back to the create page
+        header("Location: " . APPURL . "/topic/topic.php?id=".$id."");
+        exit();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -51,6 +108,13 @@ if (!isset($_SESSION['username'])) {
 						<h4 class="pull-right">club4hack</h4>
 						<div class="clearfix"></div>
 						<hr>
+
+
+					<?php	if (isset($_SESSION['message'])) {
+						echo "<script>alert('" . $_SESSION['message'] . "')</script>";
+						unset($_SESSION['message']); // Clear the message after it's displayed
+					}
+					?>
 						<ul id="topics">
 							<li id="main-topic" class="topic topic">
 								<div class="row">
@@ -69,12 +133,16 @@ if (!isset($_SESSION['username'])) {
 											<p><?php echo $singleTopic->body ; ?></p>
 										</div>
 									</div>
-
-
-
+							<?php  if (isset($_SESSION['username'])) :?>
+							
+							<?php  if ($singleTopic->author == $_SESSION['username']) : ?>
 
 									<a class="btn btn-danger" href="delete.php?id=<?php echo $singleTopic->id ;?>" role="button">Delete</a>
 									<a class="btn btn-warning" href="update.php?id=<?php echo $singleTopic->id ;?>" role="button">Edit</a>
+							<?php   endif; ?>
+							<?php   endif; ?>
+								
+								
 								</div>
 							</li>
 
@@ -86,7 +154,7 @@ if (!isset($_SESSION['username'])) {
 								<div class="row">
 									<div class="col-md-2">
 										<div class="user-info">
-											<img class="avatar pull-left" src="img/<?php  echo $replylist->user_image ?>" />
+											<img class="avatar pull-left" src="../img/<?php  echo $replylist->user_image ?>" />
 											<ul>
 												<li><strong><?php  echo $replylist->user_name ?></strong></li>
 												<li><a href="profile.php">Profile</a>
@@ -107,14 +175,14 @@ if (!isset($_SESSION['username'])) {
 						
 						</ul>
 						<h3>Reply To Topic</h3>
-						<form role="form">
+						<form role="form" method="post" action = "topic.php?id=<?php echo $id ;?>">
 							<div class="form-group">
 								<textarea id="reply" rows="10" cols="80" class="form-control" name="reply"></textarea>
 								<script>
 									CKEDITOR.replace('reply');
 								</script>
 							</div>
-							<button type="submit" class="color btn btn-default">Submit</button>
+							<button type="submit" name = "submit" class="color btn btn-default">Submit</button>
 						</form>
 					</div>
 				</div>
