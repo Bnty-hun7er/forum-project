@@ -29,6 +29,10 @@ if (!isset($_SESSION['username'])) {
 		$allReply = $reply->fetchAll(PDO::FETCH_OBJ);
 
 
+	}  else {
+
+		header("Location: " . APPURL . "/404.php");
+
 	}
 
 
@@ -165,6 +169,15 @@ if (isset($_POST['submit'])) {
 										<div class="topic-content pull-right">
 											<p><?php  echo $replylist->reply ?></p>
 										</div>
+
+										<?php  if (isset($_SESSION['username'])) :?>
+							
+							<?php  if ($replylist->user_id == $_SESSION['id']) : ?>
+
+									<a class="btn btn-danger" href="../reply/delete.php?id=<?php echo $replylist->id ;?>" role="button">Delete</a>
+									<a class="btn btn-warning" href="../reply/update.php?id=<?php echo $replylist->id ;?> " role="button">Edit</a>
+							<?php   endif; ?>
+							<?php   endif; ?>
 									</div>
 								</div>
 							</li>

@@ -69,9 +69,9 @@ if (isset($_POST['submit'])) {
 							<select class="form-control" name="category" required>
 								<option value="Design">Design</option>
 								<option value="Development">Development</option>
-								<option value="Business & Marketing">Business & Marketing</option>
+								<option value="Business and Marketing">Business & Marketing</option>
 								<option value="Search Engines">Search Engines</option>
-								<option value="Cloud & Hosting">Cloud & Hosting</option>
+								<option value="Cloud and Hosting">Cloud & Hosting</option>
 							</select>
 						</div>
 						<div class="form-group">
