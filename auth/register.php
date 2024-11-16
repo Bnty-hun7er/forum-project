@@ -2,7 +2,6 @@
 <?php require "../config/config.php"; ?>
 
 <?php
-
 if (isset($_POST['register'])) {
     if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['username']) || empty($_POST['password']) || empty($_POST['password2'])) {
         echo "<script>alert('All fields are required')</script>";
@@ -29,8 +28,13 @@ if (isset($_POST['register'])) {
         $unique_avatar = uniqid('avatar_', true) . '.' . $file_type;
         $dir = "../img/" . $unique_avatar;
 
-        // Validate file type and size
-        if (!in_array(strtolower($file_type), $allowed_types)) {
+        // Check if the username already exists
+        $check_username = $conn->prepare("SELECT * FROM users WHERE username = :username");
+        $check_username->execute([':username' => $username]);
+        
+        if ($check_username->rowCount() > 0) {
+            echo "<script>alert('Username already exists. Please choose a different one.')</script>";
+        } elseif (!in_array(strtolower($file_type), $allowed_types)) {
             echo "<script>alert('Invalid file type. Only JPG, JPEG, PNG, and GIF are allowed.')</script>";
         } elseif ($file_size > 2 * 1024 * 1024) { // 2 MB size limit
             echo "<script>alert('File size exceeds the 2 MB limit.')</script>";
@@ -54,10 +58,8 @@ if (isset($_POST['register'])) {
         }
     }
 }
-
-
-
 ?>
+
 
 
 

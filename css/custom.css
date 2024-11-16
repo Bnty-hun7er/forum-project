@@ -25,13 +25,13 @@ h3{
 /* Navbar Customization */
 .navbar{
 	height:40px !important;
-	background:#7532F9;
+	background:#0d0c0d;
 	border:0;
 	margin-bottom:30px;
 }
 
 .navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-brand{
-	color:#fff !important;
+	color:#a0f62f !important;
 }
 
 .navbar a:hover,.navbar li.active a{
@@ -40,7 +40,7 @@ h3{
 
 .navbar-brand{
 	padding:10px 0 0 0;
-	color:#fff;
+	color:#dcf120;
 }
 
 .navbar-nav > li > a{
@@ -93,7 +93,7 @@ img.avatar{
 }
 
 a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.active:focus{
-	background:rgb(117, 50, 249);
+	background:rgb(22, 22, 23);
 	border-radius:0;
 }
 
@@ -102,7 +102,7 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
 }
 
 #main-topic{
-	background:#f4f4f4;
+	background:#2760e6;
 	padding:10px;
 }
 
@@ -128,7 +128,7 @@ a.list-group-item.active, a.list-group-item.active:hover, a.list-group-item.acti
 }
 
 .btn-primary{
-	background:#7532F9;
+	background:#f32880;
 }
 
 .color {

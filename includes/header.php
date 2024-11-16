@@ -42,7 +42,6 @@ define("APPURL", "http://localhost/forumpro");
 
             <li><a href="<?php echo APPURL; ?>/auth/register.php">Register</a></li>
             <li><a href="<?php echo APPURL; ?>/topic/create.php">Create</a></li>
-            <li><a href="<?php echo APPURL; ?>/topic.php">Topic</a></li>
 
 
 
@@ -63,7 +62,7 @@ define("APPURL", "http://localhost/forumpro");
             </a>
             <ul class="dropdown-menu">
               <?php if (isset($_SESSION['username'])): ?>
-                <li><a href="#">Profile</a></li>
+                <li><a href="<?php echo APPURL; ?>/user/profile.php?id=<?php  echo $_SESSION['id']?>">Profile</a></li>
                 <li><a href="#">Contact Admin</a></li>
                 <li><a href="<?php echo APPURL; ?>/auth/logout.php">Logout</a></li>
               <?php else: ?>
