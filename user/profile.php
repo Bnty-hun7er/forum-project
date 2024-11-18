@@ -9,21 +9,19 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-if (isset($_GET['id'])) {
+if (isset($_GET['id']) ) {
     $id = $_GET['id'];
     $selectuser = $conn->prepare("SELECT * FROM users WHERE id = $id");
     $selectuser->execute();
 
     $user = $selectuser->fetch(PDO::FETCH_OBJ);
 
-    if ($user->id !== $_SESSION['id']) {
-        echo "<script>alert('You are not authorized to edit this profile');</script>";
-        header("Location: " . APPURL . "");
-        exit();
-    }
+    // if ($user->id !== $_SESSION['id']) {
+    //     echo "<script>alert('You are not authorized to edit this profile');</script>";
+    //     header("Location: " . APPURL . "");
+    //     exit();
+    // }
 }
-
-// Check if the form was submitted
 
 ?>
 
@@ -43,7 +41,7 @@ if (isset($_GET['id'])) {
                     </div> <br><br><br><br>
 
 
-                    
+
                     <div class="form-group">
                         <label>ID : <?php echo $user->id; ?> </label>
                     </div>
@@ -64,10 +62,14 @@ if (isset($_GET['id'])) {
                         <label>Joined on : <?php echo $user->signed_at; ?> </label>
                     </div>
 
-                    <form method="post" action="edit-user.php?id=<?php echo $id ;?>">
+                    <?php if ($user->id == $_SESSION['id']) : ?>
+                        <form method="post" action="edit-user.php?id=<?php echo $id; ?>">
 
-                        <button type="submit" class="btn btn-primary">Edit</button>
-                    </form>
+                            <button type="submit" class="btn btn-primary">Edit</button>
+                        </form>
+                    <?php endif; ?>
+
+
 
                 </div>
             </div>
@@ -78,4 +80,5 @@ if (isset($_GET['id'])) {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="<?php echo APPURL ?>/js/bootstrap.js"></script>
 </body>
+
 </html>

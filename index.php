@@ -7,8 +7,8 @@
 
 
 $topics = $conn->query("SELECT topics.id as id , topics.title as title , 
-		topics.category as category , topics.author as author ,
-		 topics.user_image as user_image , topics.created_at as replied_at , 
+		topics.category as category , topics.author as author , topics.user_id as user_id ,
+		 topics.user_image as user_image , topics.created_at as replied_at , replies.user_id as reply_user_id ,
 		 COUNT(replies.topic_id) as reply_count from topics LEFT JOIN replies ON 
 		 topics.id = replies.topic_id 
 		 GROUP BY (topics.id) ;");
@@ -44,7 +44,9 @@ $allTopics = $topics->fetchAll(PDO::FETCH_OBJ);
 										<div class="topic-content pull-right">
 											<h3><a href="topic/topic.php?id=<?php echo  $topic->id; ?>"><?php echo $topic->title; ?></a></h3>
 											<div class="topic-info">
-												<a href="categories/show.php?name=<?php echo $topic->category ?>"><?php echo $topic->category; ?></a> >> <a href="profile.html"><?php echo $topic->author; ?></a> >> <?php echo $topic->replied_at; ?>"
+
+											<?php   ?>
+												<a href="categories/show.php?name=<?php echo $topic->category ?>"><?php echo $topic->category; ?></a> >> <a href="<?php echo APPURL ;?>/user/profile.php?id=<?php echo $topic->user_id ;?>"><?php echo $topic->author; ?></a> >> <?php echo $topic->replied_at; ?>"
 												<span class="color badge pull-right"><?php echo $topic->reply_count; ?></span>
 											</div>
 										</div>

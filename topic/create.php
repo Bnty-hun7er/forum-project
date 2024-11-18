@@ -3,43 +3,53 @@ require "../includes/header.php";
 require "../config/config.php";
 
 if (!isset($_SESSION['username'])) {
-    header("Location: " . APPURL . "/login.php");
-    exit();
+	header("Location: " . APPURL . "/login.php");
+	exit();
 }
 
 // Check if the form was submitted
 if (isset($_POST['submit'])) {
-    if (empty($_POST['title']) || empty($_POST['category']) || empty($_POST['body'])) {
-        echo "<script>alert('All fields are required')</script>";
-    } else {
-        // Get form data
-        $title = htmlspecialchars($_POST['title']);
-        $category = htmlspecialchars($_POST['category']);
-        $body = htmlspecialchars($_POST['body']);
-        $author = $_SESSION['username'];
-        $user_image = $_SESSION['avatar'];
+	if (empty($_POST['title']) || empty($_POST['category']) || empty($_POST['body'])) {
+		echo "<script>alert('All fields are required')</script>";
+	} else {
+		// Get form data
+		$title = htmlspecialchars($_POST['title']);
+		$category = htmlspecialchars($_POST['category']);
+		$body = htmlspecialchars($_POST['body']);
+		$author = $_SESSION['username'];
+		$user_image = $_SESSION['avatar'];
 
-        try {
-            // Prepare the query to insert the topic into the database
-            $create = $conn->prepare("INSERT INTO topics (title, category, body, author, user_image) VALUES (:title, :category, :body, :author, :user_image)");
-            $create->execute(array(
-                ':title' => $title,
-                ':category' => $category,
-                ':body' => $body,
-                ':author' => $author,
-                ':user_image' => $user_image
-            ));
+		try {
+			// Prepare the query to insert the topic into the database
+			$create = $conn->prepare("INSERT INTO topics (title, category, body, author, user_image,user_id) VALUES (:title, :category, :body, :author, :user_image ,:user_id)");
+			$create->execute(array(
+				':title' => $title,
+				':category' => $category,
+				':body' => $body,
+				':author' => $author,
+				':user_image' => $user_image,
+				':user_id' => $_SESSION['id']
 
-            $_SESSION['message'] = 'Topic Created Successfully';
-        } catch (PDOException $e) {
-            $_SESSION['message'] = 'Failed to Create Topic: ' . $e->getMessage();
-        }
+			));
 
-        // Redirect back to the create page
-        header("Location: " . APPURL . "/topic/create.php");
-        exit();
-    }
+			$_SESSION['message'] = 'Topic Created Successfully';
+		} catch (PDOException $e) {
+			$_SESSION['message'] = 'Failed to Create Topic: ' . $e->getMessage();
+		}
+
+		// Redirect back to the create page
+		header("Location: " . APPURL . "/topic/create.php");
+		exit();
+	}
 }
+
+$categories_select = $conn->query("SELECT * FROM categories");
+$categories_select->execute();
+
+$allCats = $categories_select->fetchAll(PDO::FETCH_OBJ);
+
+
+
 ?>
 
 
@@ -67,11 +77,10 @@ if (isset($_POST['submit'])) {
 						<div class="form-group">
 							<label>Category</label>
 							<select class="form-control" name="category" required>
-								<option value="Design">Design</option>
-								<option value="Development">Development</option>
-								<option value="Business and Marketing">Business & Marketing</option>
-								<option value="Search Engines">Search Engines</option>
-								<option value="Cloud and Hosting">Cloud & Hosting</option>
+
+								<?php foreach ($allCats as $cat) : ?>
+									<option value="<?php echo $cat->name ?>"><?php echo $cat->name ?></option>
+								<?php endforeach; ?>
 							</select>
 						</div>
 						<div class="form-group">
