@@ -40,7 +40,6 @@ define("APPURL", "http://localhost/forumpro");
 
           <?php else : ?>
 
-            <li><a href="<?php echo APPURL; ?>/auth/register.php">Register</a></li>
             <li><a href="<?php echo APPURL; ?>/topic/create.php">Create</a></li>
 
 
@@ -67,7 +66,7 @@ define("APPURL", "http://localhost/forumpro");
                 <li><a href="<?php echo APPURL; ?>/auth/logout.php">Logout</a></li>
               <?php else: ?>
                 <li><a href="<?php echo APPURL; ?>/auth/login.php">Login</a></li>
-                <li><a href="#">About the dev</a></li>
+                <li><a href="http://mikeben.me" target="_blank">About the dev</a></li>
               <?php endif; ?>
             </ul>
           </li>

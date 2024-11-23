@@ -139,7 +139,7 @@ if (isset($_POST['submit'])) {
 									</div>
 							<?php  if (isset($_SESSION['username'])) :?>
 							
-							<?php  if ($singleTopic->author == $_SESSION['username']) : ?>
+							<?php  if ($singleTopic->user_id == $_SESSION['id']) : ?>
 
 									<a class="btn btn-danger" href="delete.php?id=<?php echo $singleTopic->id ;?>" role="button">Delete</a>
 									<a class="btn btn-warning" href="update.php?id=<?php echo $singleTopic->id ;?>" role="button">Edit</a>

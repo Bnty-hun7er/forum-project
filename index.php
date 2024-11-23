@@ -1,9 +1,11 @@
+
+
+
 <?php require "includes/header.php"; ?>
 <?php require "config/config.php"; ?>
 
 
 <?php
-
 
 
 $topics = $conn->query("SELECT topics.id as id , topics.title as title , 

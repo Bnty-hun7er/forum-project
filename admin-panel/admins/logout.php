@@ -5,4 +5,4 @@
         session_destroy();
 
         header("Location: http://localhost/forumpro/admin-panel/admins/login-admins.php");
-?>
+?>                            

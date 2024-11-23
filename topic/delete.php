@@ -25,7 +25,7 @@
             $topic = $select->fetch(PDO::FETCH_OBJ);
 
 
-			if ($topic->author != $_SESSION['username']) {
+			if ($topic->user_id != $_SESSION['id']) {
 				echo "<script>alert('You are not authorized to delete this topic')</script>";
                 sleep(2);
 				header("Location: " . APPURL . "");

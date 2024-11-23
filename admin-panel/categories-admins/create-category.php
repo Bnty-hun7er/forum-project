@@ -1,5 +1,39 @@
 <?php include "../layout/header.php" ; ?>
-       <div class="row">
+<?php include "../../config/config.php" ; ?>
+
+<?php
+
+if (!isset($_SESSION['adminname'])) {
+  header("Location: " . ADMINURL . "/admins/login-admins.php");
+}
+
+if (isset($_POST['submit'])) {
+  if (empty($_POST['name']) ) {
+    echo "<script>alert('name is  required')</script>";
+  } else {
+    $name = $_POST['name'];
+   
+    // Check if the username already exists
+    $check_username = $conn->prepare("SELECT * FROM categories WHERE name = :name");
+    $check_username->execute([':name' => $name]);
+
+    if ($check_username->rowCount() > 0) {
+      echo "<script>alert('Category already exists. Please choose a different one.')</script>";
+    } else {
+      $insertCategory= $conn->prepare("INSERT INTO categories (name) VALUES (:name)");
+      $insertCategory->execute(array(
+        ':name' => $name,
+       
+      ));
+
+      header("Location: " . ADMINURL . "/categories-admins/show-categories.php");
+    }
+  }
+}
+?>
+
+
+<div class="row">
         <div class="col">
           <div class="card">
             <div class="card-body">
@@ -21,4 +55,6 @@
             </div>
           </div>
         </div>
-        <?php include "../layout/footer.php" ?>
+        
+        
+<?php include "../layout/footer.php" ?>
