@@ -141,7 +141,7 @@ if (isset($_POST['submit'])) {
 							
 							<?php  if ($singleTopic->user_id == $_SESSION['id']) : ?>
 
-									<a class="btn btn-danger" href="delete.php?id=<?php echo $singleTopic->id ;?>" role="button">Delete</a>
+									<a class="btn btn-danger" onclick="confirmDeletionTopic(<?php  echo $singleTopic->id ; ?>)"  role="button">Delete</a>
 									<a class="btn btn-warning" href="update.php?id=<?php echo $singleTopic->id ;?>" role="button">Edit</a>
 							<?php   endif; ?>
 							<?php   endif; ?>
@@ -174,8 +174,8 @@ if (isset($_POST['submit'])) {
 							
 							<?php  if ($replylist->user_id == $_SESSION['id']) : ?>
 
-									<a class="btn btn-danger" href="../reply/delete.php?id=<?php echo $replylist->id ;?>" role="button">Delete</a>
-									<a class="btn btn-warning" href="../reply/update.php?id=<?php echo $replylist->id ;?> " role="button">Edit</a>
+									<a class="btn btn-danger" onclick="confirmDeletionReply(<?php  echo $replylist->id ; ?>)"   role="button">Delete</a>
+									<a class="btn btn-warning"  href="../reply/update.php?id=<?php echo $replylist->id ;?> " role="button">Edit</a>
 							<?php   endif; ?>
 							<?php   endif; ?>
 									</div>
@@ -200,6 +200,33 @@ if (isset($_POST['submit'])) {
 					</div>
 				</div>
 			</div>
+
+
+			<script>
+  function confirmDeletionTopic(id) {
+    // Display the confirmation dialog
+    let userResponse = confirm("Are you sure you want to delete this topic?");
+    if (userResponse) {
+      // If confirmed, redirect to the delete page with the category ID
+      window.location.href = `<?php echo APPURL ; ?>/topic/delete.php?id=${id}`;
+    }
+  }
+
+
+
+  function confirmDeletionReply(id) {
+    // Display the confirmation dialog
+    let userResponse = confirm("Are you sure you want to delete this reply?");
+    if (userResponse) {
+      // If confirmed, redirect to the delete page with the category ID
+      window.location.href = `<?php echo APPURL ; ?>/reply/delete.php?id=${id}`;
+    }
+  }
+</script>
+
+
+
+
 		
 		
 		
