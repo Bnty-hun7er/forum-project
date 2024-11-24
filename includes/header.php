@@ -10,12 +10,14 @@ define("APPURL", "http://localhost/forumpro");
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hakers Talk</title>
+  <title>SUPER CHAT</title>
 
   <!-- Bootstrap core CSS -->
   <link href="<?php echo APPURL ?>/css/bootstrap.css" rel="stylesheet">
   <!-- Custom styles for this template -->
   <link href="<?php echo APPURL ?>/css/custom.css" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/eye32.ico">
+
 </head>
 
 <body>
